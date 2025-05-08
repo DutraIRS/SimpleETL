@@ -32,7 +32,14 @@ docker-compose up --build
 
 # Insert data into the source database
 docker exec fastapi_app python populate_db.py
+```
 
+After running the above commands, the FastAPI application will be available at `http://localhost:8000`. You can access the API documentation at `http://localhost:8000/docs`.
+
+Dagster webserver will be available at `http://localhost:3000`. There, you can observe the ETL process and monitor the status of the jobs.
+
+To run the ETL process bypassing the Dagster webserver, you can use the following command:
+```bash
 # Run the ETL process (for example, for the date 2025-01-01)
 docker exec etl-container python etl/etl.py 2025-01-01
 ```
