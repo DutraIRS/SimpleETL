@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   source_db:
     image: postgres:latest
@@ -12,7 +10,7 @@ services:
       - .env
     networks:
       - etl-net
-  
+
   target_db:
     image: postgres:latest
     container_name: target_db
@@ -24,7 +22,7 @@ services:
       - .env
     networks:
       - etl-net
-  
+
   api:
     build: ./api
     container_name: fastapi_app
@@ -36,7 +34,7 @@ services:
       - source_db
     networks:
       - etl-net
-  
+
   etl:
     build: ./etl
     container_name: etl-container
@@ -50,9 +48,22 @@ services:
     networks:
       - etl-net
 
+  dagster:
+    build:
+      context: .
+      dockerfile: dagster_pipeline/Dockerfile
+    container_name: dagster-pipeline
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    networks:
+      - etl-net
+
 volumes:
   source_db_data:
   target_db_data:
 
 networks:
   etl-net:
+    driver: bridge
